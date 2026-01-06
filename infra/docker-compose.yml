@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  questdb:
+    image: questdb/questdb:latest
+    container_name: questdb
+    restart: unless-stopped
+    ports:
+      - "9000:9000"  # Web console
+      - "8812:8812"  # Postgres wire protocol
+      - "9009:9009"  # InfluxDB line protocol
+    environment:
+      - QDB_CAIRO_MAX_FD=100000
+    volumes:
+      - ./questdb-data:/var/lib/questdb
+      - ./questdb-conf:/var/lib/questdb/conf
+      - ./questdb-import:/var/lib/questdb/import
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s

@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "utility-ts-analytics"
+version = "0.1.0"
+description = "QuestDB-backed time-series analytics for an electric utility"
+authors = [
+  { name = "Your Name", email = "you@example.com" },
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "MIT" }
+
+dependencies = [
+  "psycopg[binary]~=3.2",  # for Postgres wire to QuestDB
+  "pandas~=2.2",           # optional local analysis
+  "pyyaml~=6.0",           # config
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest~=8.0",
+  "pytest-cov~=5.0",
+  "ruff~=0.6",   # linting
+  "mypy~=1.13",  # type checking
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

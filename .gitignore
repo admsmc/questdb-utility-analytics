@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+.env/
+venv/
+
+# Distribution / packaging
+.build/
+.dist/
+build/
+dist/
+*.egg-info/
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+
+# Data
+questdb-utility-analytics/questdb-data/
+questdb-utility-analytics/questdb-import/
+questdb-utility-analytics/questdb-conf/
+*.csv
+*.parquet
+
+# Tests
+.htmlcov/
+coverage.xml
+.pytest_cache/
