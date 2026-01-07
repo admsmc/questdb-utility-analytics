@@ -39,6 +39,9 @@ infra/caddy/config/
 **/target/
 target/
 
+# Local ingestion-service config
+ingestion-config.toml
+
 # Tests
 .htmlcov/
 coverage.xml

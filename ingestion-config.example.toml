@@ -43,6 +43,8 @@ workers = 2
 
 # Batch size
 batch_size = 5000
+# Flush partial batches after this long (ms)
+max_batch_linger_ms = 200
 max_retries = 5
 retry_backoff_ms = 200
 
@@ -66,6 +68,7 @@ kind = "ilp"
 workers = 2
 
 batch_size = 5000
+max_batch_linger_ms = 200
 max_retries = 5
 retry_backoff_ms = 200
 

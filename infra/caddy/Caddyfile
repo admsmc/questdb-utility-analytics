@@ -12,8 +12,10 @@
 #
 # Upstreams use host.docker.internal so the proxy can reach services
 # running on the host (Mac/Windows Docker Desktop).
+#
+# Note: the site is bound to localhost so Caddy can mint a local cert.
 
-:7443 {
+localhost:7443 {
 	tls internal
 
 	# Meter usage

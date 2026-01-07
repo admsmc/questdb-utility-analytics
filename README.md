@@ -35,6 +35,8 @@ or via a thin service) where stronger guarantees are needed.
    docker compose -f infra/docker-compose.yml up -d
    ```
 
+   Note: `infra/docker-compose.yml` uses a Docker **named volume** for QuestDB data (to avoid Docker Desktop filesystem quirks). To wipe all DB data, remove the volume.
+
 2. Create an ingestion config:
 
    ```bash

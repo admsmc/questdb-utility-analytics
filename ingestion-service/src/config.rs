@@ -72,6 +72,10 @@ fn default_sink_workers() -> usize {
     1
 }
 
+fn default_max_batch_linger_ms() -> u64 {
+    200
+}
+
 #[derive(Debug, Clone, Deserialize)]
 pub struct SinkConfig {
     /// Which sink implementation to use.
@@ -83,6 +87,12 @@ pub struct SinkConfig {
     /// For ILP, this controls how many concurrent TCP connections are used.
     #[serde(default = "default_sink_workers")]
     pub workers: usize,
+
+    /// Maximum time to hold a partial batch before flushing (milliseconds).
+    ///
+    /// Without this, low-volume ingestion would wait indefinitely for `batch_size`.
+    #[serde(default = "default_max_batch_linger_ms")]
+    pub max_batch_linger_ms: u64,
 
     pub batch_size: usize,
     pub max_retries: u32,

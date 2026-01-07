@@ -186,16 +186,24 @@ pub struct QuestDbIlpSink<T> {
     batch_size: usize,
     max_retries: u32,
     retry_backoff: Duration,
+    max_batch_linger: Duration,
     _marker: PhantomData<fn() -> T>,
 }
 
 impl<T> QuestDbIlpSink<T> {
-    pub fn new(addr: SocketAddr, batch_size: usize, max_retries: u32, retry_backoff: Duration) -> Self {
+    pub fn new(
+        addr: SocketAddr,
+        batch_size: usize,
+        max_retries: u32,
+        retry_backoff: Duration,
+        max_batch_linger: Duration,
+    ) -> Self {
         Self {
             addr,
             batch_size,
             max_retries,
             retry_backoff,
+            max_batch_linger,
             _marker: PhantomData,
         }
     }
@@ -277,22 +285,37 @@ where
     where
         S: futures::Stream<Item = Result<Envelope<T>, PipelineError>> + Send + Unpin + 'static,
     {
+        use tokio::time::MissedTickBehavior;
+
         let mut stream = self.connect().await?;
         let mut buffer: Vec<Envelope<T>> = Vec::with_capacity(self.batch_size);
 
-        while let Some(item) = input.next().await {
-            let env = match item {
-                Ok(env) => env,
-                Err(e) => {
-                    tracing::error!(error = %e, "error in upstream pipeline for QuestDbIlpSink");
-                    continue;
-                }
-            };
+        let mut ticker = tokio::time::interval(self.max_batch_linger);
+        ticker.set_missed_tick_behavior(MissedTickBehavior::Delay);
 
-            buffer.push(env);
-            if buffer.len() >= self.batch_size {
-                self.flush_batch(&mut stream, &buffer).await?;
-                buffer.clear();
+        loop {
+            tokio::select! {
+                maybe_item = input.next() => {
+                    match maybe_item {
+                        Some(Ok(env)) => {
+                            buffer.push(env);
+                            if buffer.len() >= self.batch_size {
+                                self.flush_batch(&mut stream, &buffer).await?;
+                                buffer.clear();
+                            }
+                        }
+                        Some(Err(e)) => {
+                            tracing::error!(error = %e, "error in upstream pipeline for QuestDbIlpSink");
+                        }
+                        None => break,
+                    }
+                }
+                _ = ticker.tick() => {
+                    if !buffer.is_empty() {
+                        self.flush_batch(&mut stream, &buffer).await?;
+                        buffer.clear();
+                    }
+                }
             }
         }
 
@@ -336,6 +359,7 @@ pub struct QuestDbIlpParallelSink<T> {
     batch_size: usize,
     max_retries: u32,
     retry_backoff: Duration,
+    max_batch_linger: Duration,
     workers: usize,
     _marker: PhantomData<fn() -> T>,
 }
@@ -346,6 +370,7 @@ impl<T> QuestDbIlpParallelSink<T> {
         batch_size: usize,
         max_retries: u32,
         retry_backoff: Duration,
+        max_batch_linger: Duration,
         workers: usize,
     ) -> Self {
         Self {
@@ -353,6 +378,7 @@ impl<T> QuestDbIlpParallelSink<T> {
             batch_size,
             max_retries,
             retry_backoff,
+            max_batch_linger,
             workers: workers.max(1),
             _marker: PhantomData,
         }
@@ -375,7 +401,13 @@ where
             let (tx, rx) = tokio::sync::mpsc::channel::<Envelope<T>>(self.batch_size.saturating_mul(2));
             txs.push(tx);
 
-            let sink = QuestDbIlpSink::<T>::new(self.addr, self.batch_size, self.max_retries, self.retry_backoff);
+            let sink = QuestDbIlpSink::<T>::new(
+                self.addr,
+                self.batch_size,
+                self.max_retries,
+                self.retry_backoff,
+                self.max_batch_linger,
+            );
             let stream = tokio_stream::wrappers::ReceiverStream::new(rx).map(Ok);
 
             joins.push(tokio::spawn(async move { sink.run(stream).await }));

@@ -96,6 +96,7 @@ async fn main() -> Result<()> {
             mu_cfg.sink.batch_size,
             mu_cfg.sink.max_retries,
             Duration::from_millis(mu_cfg.sink.retry_backoff_ms),
+            Duration::from_millis(mu_cfg.sink.max_batch_linger_ms),
             mu_cfg.sink.workers,
         )),
         SinkKind::Pgwire => {
@@ -131,6 +132,7 @@ async fn main() -> Result<()> {
             gen_cfg.sink.batch_size,
             gen_cfg.sink.max_retries,
             Duration::from_millis(gen_cfg.sink.retry_backoff_ms),
+            Duration::from_millis(gen_cfg.sink.max_batch_linger_ms),
             gen_cfg.sink.workers,
         )),
         SinkKind::Pgwire => {
