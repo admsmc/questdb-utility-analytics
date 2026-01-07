@@ -59,10 +59,14 @@ pub async fn aggregated_segment_load(
         SELECT
             mu.ts,
             c.segment,
-            SUM(mu.kwh) AS total_kwh
+            SUM(mu.kwh * COALESCE(msm.kwh_multiplier, 1.0)) AS total_kwh
         FROM meter_usage mu
         JOIN meters m ON mu.meter_id = m.meter_id
         JOIN customers c ON m.customer_id = c.customer_id
+        LEFT JOIN meter_scale_map msm
+          ON msm.meter_id = mu.meter_id
+         AND msm.from_ts <= mu.ts
+         AND msm.to_ts   >  mu.ts
         WHERE mu.ts >= $1
           AND mu.ts <  $2
           AND c.segment = ANY($3)

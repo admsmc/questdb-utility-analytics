@@ -16,15 +16,25 @@ class TimeRange:
 
 
 def load_profile_sql(meter_id: str, time_range: TimeRange) -> str:
-    """SQL to fetch a time-ordered load profile for a single meter."""
+    """SQL to fetch a time-ordered load profile for a single meter.
+
+    This applies the meter_scale_map.kwh_multiplier (CT/PT or billing multiplier)
+    so the returned kWh reflect actual usage, not raw register values.
+    """
 
     return f"""
-SELECT ts, kwh
-FROM meter_usage
-WHERE meter_id = '{meter_id}'
-  AND ts >= '{time_range.start}'
-  AND ts <  '{time_range.end}'
-ORDER BY ts;
+SELECT
+    mu.ts,
+    mu.kwh * COALESCE(msm.kwh_multiplier, 1.0) AS kwh
+FROM meter_usage mu
+LEFT JOIN meter_scale_map msm
+  ON msm.meter_id = mu.meter_id
+ AND msm.from_ts <= mu.ts
+ AND msm.to_ts   >  mu.ts
+WHERE mu.meter_id = '{meter_id}'
+  AND mu.ts >= '{time_range.start}'
+  AND mu.ts <  '{time_range.end}'
+ORDER BY mu.ts;
 """.strip()
 
 
@@ -41,10 +51,14 @@ def aggregated_segment_load_sql(
 SELECT
     mu.ts,
     c.segment,
-    SUM(mu.kwh) AS total_kwh
+    SUM(mu.kwh * COALESCE(msm.kwh_multiplier, 1.0)) AS total_kwh
 FROM meter_usage mu
 JOIN meters m ON mu.meter_id = m.meter_id
 JOIN customers c ON m.customer_id = c.customer_id
+LEFT JOIN meter_scale_map msm
+  ON msm.meter_id = mu.meter_id
+ AND msm.from_ts <= mu.ts
+ AND msm.to_ts   >  mu.ts
 WHERE mu.ts >= '{time_range.start}'
   AND mu.ts <  '{time_range.end}'
   AND c.segment IN ({segments_list})
