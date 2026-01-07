@@ -2,6 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS meter_usage (
     ts              TIMESTAMP,
+    event_id        SYMBOL,
     meter_id        SYMBOL,
     premise_id      SYMBOL,
     kwh             DOUBLE,
@@ -14,6 +15,7 @@ PARTITION BY DAY;
 
 CREATE TABLE IF NOT EXISTS generation_output (
     ts              TIMESTAMP,
+    event_id        SYMBOL,
     plant_id        SYMBOL,
     unit_id         SYMBOL,
     mw              DOUBLE,

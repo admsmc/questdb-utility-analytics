@@ -1,0 +1,14 @@
+services:
+  ingestion-tls-proxy:
+    image: caddy:2
+    container_name: ingestion-tls-proxy
+    restart: unless-stopped
+    ports:
+      - "7443:7443" # HTTPS reverse proxy for ingestion endpoints
+    # Ensure host.docker.internal works on Linux (Docker 20.10+).
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy/data:/data
+      - ./caddy/config:/config

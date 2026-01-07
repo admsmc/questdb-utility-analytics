@@ -1,0 +1,74 @@
+# Example configuration for `ingestion-service`.
+#
+# Copy to `ingestion-config.toml` and edit as needed:
+#   cp ingestion-config.example.toml ingestion-config.toml
+#
+# You can also point to a different config file at runtime:
+#   INGESTION_CONFIG=path/to/config.toml cargo run --manifest-path ingestion-service/Cargo.toml
+
+[questdb]
+# QuestDB Postgres wire protocol (default port 8812)
+# Used by pgwire sinks and SQL-based jobs/binaries.
+uri = "postgresql://admin:quest@localhost:8812/qdb"
+max_connections = 10
+
+# QuestDB Influx Line Protocol TCP (default port 9009)
+# Used by ILP sinks (the default).
+ilp_tcp_addr = "127.0.0.1:9009"
+
+[meter_usage]
+name = "meter_usage"
+
+[meter_usage.source]
+http_bind_addr = "0.0.0.0:7001"
+channel_capacity = 10000
+
+# Optional bearer token auth (uncomment to enable)
+# auth_bearer_token = "replace-me"
+
+# Max HTTP request body size (bytes)
+max_body_bytes = 10485760  # 10 MiB
+# Max number of records accepted in a single request
+max_request_records = 5000
+# Max NDJSON line size (bytes)
+max_line_bytes = 1048576
+# If true, NDJSON endpoints return 400 on the first malformed line.
+ndjson_strict = false
+
+[meter_usage.sink]
+# Sink kind: "ilp" (default, best throughput) or "pgwire" (sqlx over Postgres wire)
+kind = "ilp"
+# Number of parallel sink workers / ILP TCP connections
+workers = 2
+
+# Batch size
+batch_size = 5000
+max_retries = 5
+retry_backoff_ms = 200
+
+[generation_output]
+name = "generation_output"
+
+[generation_output.source]
+http_bind_addr = "0.0.0.0:7002"
+channel_capacity = 10000
+
+# Optional bearer token auth (uncomment to enable)
+# auth_bearer_token = "replace-me"
+
+max_body_bytes = 10485760  # 10 MiB
+max_request_records = 5000
+max_line_bytes = 1048576
+ndjson_strict = false
+
+[generation_output.sink]
+kind = "ilp"
+workers = 2
+
+batch_size = 5000
+max_retries = 5
+retry_backoff_ms = 200
+
+# Optional Prometheus metrics endpoint
+[metrics]
+bind_addr = "0.0.0.0:9090"

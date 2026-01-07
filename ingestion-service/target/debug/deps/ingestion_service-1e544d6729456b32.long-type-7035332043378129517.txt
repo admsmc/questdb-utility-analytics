@@ -1,1 +1,0 @@
-Pin<Box<dyn Stream<Item = Result<Envelope<MeterUsage>, PipelineError>> + std::marker::Send>>

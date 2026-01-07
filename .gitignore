@@ -24,11 +24,20 @@ dist/
 .DS_Store
 
 # Data
-questdb-utility-analytics/questdb-data/
-questdb-utility-analytics/questdb-import/
-questdb-utility-analytics/questdb-conf/
+infra/questdb-data/
+infra/questdb-import/
+infra/questdb-conf/
+
+# Caddy (TLS proxy) state
+infra/caddy/data/
+infra/caddy/config/
+
 *.csv
 *.parquet
+
+# Rust
+**/target/
+target/
 
 # Tests
 .htmlcov/

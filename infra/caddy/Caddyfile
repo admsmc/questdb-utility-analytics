@@ -1,0 +1,27 @@
+{
+	# Keep logs readable; tune as needed.
+	log {
+		level INFO
+	}
+}
+
+# HTTPS reverse proxy for ingestion-service.
+#
+# This uses Caddy's internal CA for local/dev TLS.
+# Clients can use curl with -k, or you can trust Caddy's root CA.
+#
+# Upstreams use host.docker.internal so the proxy can reach services
+# running on the host (Mac/Windows Docker Desktop).
+
+:7443 {
+	tls internal
+
+	# Meter usage
+	reverse_proxy /ingest/meter_usage* http://host.docker.internal:7001
+
+	# Generation output
+	reverse_proxy /ingest/generation_output* http://host.docker.internal:7002
+
+	# Optional: expose Prometheus metrics if ingestion-service is running them.
+	# reverse_proxy /metrics http://host.docker.internal:9090
+}

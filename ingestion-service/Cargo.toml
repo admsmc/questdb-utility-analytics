@@ -11,6 +11,7 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+blake3 = "1"
 sqlx = { version = "0.8", features = ["runtime-tokio", "postgres", "time", "macros", "postgres"] }
 rust-client = { path = "../rust-client" }
 async-trait = "0.1"
@@ -19,6 +20,7 @@ axum = { version = "0.7", features = ["macros", "json"] }
 async-stream = "0.3"
 csv = "1.3"
 tokio-stream = "0.1"
+tokio-util = { version = "0.7", features = ["io"] }
 # Time handling (timestamps)
 time = { version = "0.3", features = ["macros", "serde"] }
 # Metrics instrumentation

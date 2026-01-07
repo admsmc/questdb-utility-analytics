@@ -1,5 +1,0 @@
-/Users/andrewmathers/questdb-utility-analytics/ingestion-service/target/debug/deps/atoi-e524ad294d4cbf74.d: /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/atoi-2.0.0/src/lib.rs
-
-/Users/andrewmathers/questdb-utility-analytics/ingestion-service/target/debug/deps/libatoi-e524ad294d4cbf74.rmeta: /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/atoi-2.0.0/src/lib.rs
-
-/Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/atoi-2.0.0/src/lib.rs:
