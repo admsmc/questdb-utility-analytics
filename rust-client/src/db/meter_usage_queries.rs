@@ -51,12 +51,11 @@ pub async fn aggregated_segment_load(
     segments: &[String],
     start: OffsetDateTime,
     end: OffsetDateTime,
-    sample_by: &str,
+    _sample_by: &str,
 ) -> Result<Vec<AggregatedSegmentLoad>> {
     // Build a dynamic list for the IN clause. For a small number of segments this
     // is acceptable; for large sets you would typically join against a temp table.
-    let mut sql = format!(
-        r#"
+    let sql = r#"
         SELECT
             mu.ts,
             c.segment,
@@ -69,8 +68,7 @@ pub async fn aggregated_segment_load(
           AND c.segment = ANY($3)
         GROUP BY mu.ts, c.segment
         ORDER BY mu.ts, c.segment
-        "#
-    );
+        "#.to_string();
 
     // Note: QuestDB's `SAMPLE BY` is powerful but not supported directly in sqlx's
     // typed query builder, so we keep this example to a plain GROUP BY. You can

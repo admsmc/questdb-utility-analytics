@@ -1,0 +1,12 @@
+/Users/andrewmathers/questdb-utility-analytics/ingestion-service/target/debug/deps/serde-84a3fffdb050a424.d: /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/andrewmathers/questdb-utility-analytics/ingestion-service/target/debug/build/serde-003736f7f5663e40/out/private.rs
+
+/Users/andrewmathers/questdb-utility-analytics/ingestion-service/target/debug/deps/libserde-84a3fffdb050a424.rmeta: /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/andrewmathers/questdb-utility-analytics/ingestion-service/target/debug/build/serde-003736f7f5663e40/out/private.rs
+
+/Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/Users/andrewmathers/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/Users/andrewmathers/questdb-utility-analytics/ingestion-service/target/debug/build/serde-003736f7f5663e40/out/private.rs:
+
+# env-dep:OUT_DIR=/Users/andrewmathers/questdb-utility-analytics/ingestion-service/target/debug/build/serde-003736f7f5663e40/out
